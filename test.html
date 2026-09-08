@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reliance Home Comfort - CXone Digital Chat Demo</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .hero {
+            background: #00599a;
+            padding: 100px 20px;
+        }
+
+        .footer {
+            background: #212529;
+        }
+
+        .chat-launch-btn {
+            background: #00599a;
+            border-color: #00599a;
+        }
+
+        .chat-launch-btn:hover {
+            background: #00467a;
+            border-color: #00467a;
+        }
+    </style>
+
+    <!-- NICE CXone Chat -->
+    <script type="text/javascript" id="sticky-button-live-chat">
+        (function (n, u) {
+            window.CXoneDfo = n;
+
+            window[n] = window[n] || function () {
+                (window[n].q = window[n].q || []).push(arguments);
+            };
+
+            window[n].u = u;
+
+            var e = document.createElement("script");
+            e.type = "module";
+            e.src = u + "?" + Math.round(Date.now() / 1e3 / 3600);
+
+            document.head.appendChild(e);
+
+        })('cxone', 'https://web-modules-de-ca1.niceincontact.com/loader/1/loader.js');
+
+        cxone('init', '1165');
+        cxone('chat', 'init', 1165, 'chat_fc3e890c-4658-4c1b-9ee2-d0d8ce024309');
+        cxone('chat', 'setOffsetY', '90');
+        cxone('chat', 'enableCloseIcon', true);
+
+        cxone('chat', 'setCustomCss',
+            '[data-selector="WIDGET"] {' +
+            'display:none !important;' +
+            'background:#00599a !important;' +
+            'height:60px !important;' +
+            'width:58px !important;' +
+            '}'
+        );
+
+        const CXONE_CHAT_OPEN_KEY = 'cxoneChatOpen';
+        const CXONE_Z_OPEN = '3000';
+        const CXONE_Z_CLOSED = '0';
+
+        const CXONE_VISIBLE_CSS =
+            '[data-selector="WIDGET"] {' +
+            'display:block !important;' +
+            'background:#00599a !important;' +
+            'height:60px !important;' +
+            'width:58px !important;' +
+            '}' +
+            '[data-selector="HEADER"] {' +
+            'background:#00599a !important;' +
+            'color:white !important;' +
+            '}' +
+            '[data-selector="WINDOW"] {' +
+            'background:#00599a !important;' +
+            '}' +
+            '[data-selector="POPUP"] {' +
+            'background:#00599a !important;' +
+            'color:white !important;' +
+            '}';
+
+        function cxoneSetChatZIndex(z) {
+            var container = document.getElementById('be-chat-container');
+            if (container) {
+                container.style.zIndex = z;
+            }
+        }
+
+        function cxoneOpenChat() {
+            try {
+                sessionStorage.setItem(CXONE_CHAT_OPEN_KEY, '1');
+
+                cxoneSetChatZIndex(CXONE_Z_OPEN);
+
+                cxone('chat', 'setCustomCss', CXONE_VISIBLE_CSS);
+
+                cxone('chat', 'openChatWindow');
+
+            } catch (e) {
+                console.error('Failed to open chat:', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const liveChatButton =
+                document.getElementById('live-chat-static');
+
+            if (liveChatButton) {
+                liveChatButton.addEventListener(
+                    'click',
+                    cxoneOpenChat
+                );
+            }
+
+            let tries = 0;
+
+            const interval = setInterval(function () {
+
+                const chatContainer =
+                    document.getElementById('be-chat-container');
+
+                if (chatContainer) {
+
+                    if (sessionStorage.getItem(CXONE_CHAT_OPEN_KEY)) {
+
+                        chatContainer.style.zIndex = CXONE_Z_OPEN;
+
+                        cxone(
+                            'chat',
+                            'setCustomCss',
+                            CXONE_VISIBLE_CSS
+                        );
+
+                    } else {
+
+                        chatContainer.style.zIndex =
+                            CXONE_Z_CLOSED;
+                    }
+
+                    clearInterval(interval);
+
+                } else if (++tries > 100) {
+
+                    clearInterval(interval);
+
+                }
+
+            }, 300);
+
+        });
+    </script>
+    <!-- END NICE CXone Chat -->
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+        #
+            Reliance Home Comfort
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    #Air Conditioners</a>
+                </li>
+                <li class="nav-item">
+                    #Heat Pumps</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+<header class="hero text-white text-center">
+
+    <div class="container">
+
+        <h1 class="display-4">
+            Welcome to Reliance Home Comfort
+        </h1>
+
+        <p class="lead">
+            Demo site for CXone Digital Chat Implementation
+        </p>
+
+        <button id="live-chat-static"
+                class="btn btn-lg btn-light mt-4 chat-launch-btn text-white">
+            Chat With Us
+        </button>
+
+    </div>
+
+</header>
+
+<section class="container my-5">
+
+    <h2>Welcome to Reliance Home Comfort</h2>
+
+    <p>
+        This page is being used to test the NICE CXone
+        Digital Chat widget integration.
+    </p>
+
+    <p>
+        Click the "Chat With Us" button above to launch
+        the CXone chat window.
+    </p>
+
+</section>
+
+<footer class="footer text-white text-center p-4">
+    <p>
+        © 2026 Reliance Home Comfort | CXone Digital Demo Environment
+    </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
